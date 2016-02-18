@@ -1,0 +1,12 @@
+# Clear administrative tokens just in case
+unset OS_TOKEN_URL OS_URL
+
+export OS_DOMAIN_NAME=default
+export OS_USERNAME=admin
+export OS_PASSWORD=admin
+export OS_PROJECT_NAME=admin
+export OS_PROJECT_DOMAIN_ID=default   # optional since project is unique
+export OS_USER_DOMAIN_ID=default      # optional since user is unique
+export OS_AUTH_URL=http://localhost:35357/v3 
+
+# Login with: openstack token issue

@@ -1,0 +1,5 @@
+Support the ability to let host access on any port.  Would require something like the spotify/kafka 
+     container has, but in a way that works.  Would require that instead of launching keystone-all in
+     the CMD, it would instead launcha script that pulls the host info (hostname -I) plus the exposed
+     ports, updates the keystone.conf, launches keystone-all, updates the endpoint info using the
+     openstack command, then leaves keystone running.  May require supervisord and a lot of coordination.
