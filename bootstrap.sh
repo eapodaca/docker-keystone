@@ -1,34 +1,27 @@
+/usr/sbin/apache2ctl start
 
-# Start running keystone in the background and capture its pid
-keystone-all &
-KEYSTONE_PID=$!
-
-# Wait a few seconds for it to start
-sleep 5
-
-# Create the "normal" set of users and permissions
-export OS_TOKEN=ADMIN
-export OS_URL=http://127.0.0.1:35357/v3
+export OS_TOKEN=token
+export OS_URL=http://localhost:35357/v3
 export OS_IDENTITY_API_VERSION=3
 
+# Create service and endpoints
 openstack service create --name keystone --description "OpenStack Identity" identity
-openstack endpoint create --region regionOne identity public   http://localhost:5000/v2.0
-openstack endpoint create --region regionOne identity internal http://localhost:5000/v2.0
-openstack endpoint create --region regionOne identity admin    http://localhost:35357/v2.0
+openstack endpoint create --region region1 identity public http://localhost:5000/v3
+openstack endpoint create --region region1 identity internal http://localhost:5000/v3
+openstack endpoint create --region region1 identity admin http://localhost:35357/v3
 
-# Create admin project, admin user
-openstack project create --domain default --description "Admin Project" admin
-openstack user create --domain default --email admin@hp.com --password admin admin
-openstack role create admin
-openstack role add --project admin --user admin admin
-# Add admin as the cloud admin
-openstack role add --domain default --user admin admin
+source /openstack.osrc
 
-# Create the demo project
-openstack project create --domain default --description "Demo Project" demo
-openstack user create --domain default --password demo demo
-openstack role create user
-openstack role add --project demo --user demo user
+# Set the admin's default project to be admin
+openstack user set --project admin admin
 
-# Kill keystone.  It will be restarted when the packaged container is started
-kill $KEYSTONE_PID
+# Create the user dev as another admin
+openstack user create --project admin --password password --enable dev
+openstack role add --project admin --user dev admin  
+openstack role add --domain default --user dev admin
+
+# Create the user 'user' as a non-admin admin
+openstack user create --project admin --password password --enable user
+openstack role add --project admin --user user _member_
+
+/usr/sbin/apache2ctl stop

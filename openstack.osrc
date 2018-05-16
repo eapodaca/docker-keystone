@@ -1,12 +1,11 @@
-# Clear administrative tokens just in case
-unset OS_TOKEN_URL OS_URL
+# Unset admin stuff, just in case
+unset OS_TOKEN
+unset OS_URL
 
-export OS_DOMAIN_NAME=default
+export OS_AUTH_URL=http://localhost:5000/v3
+export OS_IDENTITY_API_VERSION=3
 export OS_USERNAME=admin
-export OS_PASSWORD=admin
+export OS_PASSWORD=password
+export OS_DOMAIN_NAME=Default
 export OS_PROJECT_NAME=admin
-export OS_PROJECT_DOMAIN_ID=default   # optional since project is unique
-export OS_USER_DOMAIN_ID=default      # optional since user is unique
-export OS_AUTH_URL=http://localhost:35357/v3 
-
-# Login with: openstack token issue
+export OS_PROJECT_DOMAIN_NAME=Default

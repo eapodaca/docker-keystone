@@ -1,26 +1,27 @@
-FROM ubuntu:15.10
+FROM opensuse:42.2
 
-MAINTAINER Gary Smith <gary.smith@hpe.com>
+MAINTAINER Gary Smith <gary.smith@suse.com>
 
-# Deal with the corporate proxy
-COPY 01proxy /etc/apt/apt.conf.d
+RUN zypper addrepo -Gf https://download.opensuse.org/repositories/Cloud:/OpenStack:/Newton/openSUSE_Leap_42.2/Cloud:OpenStack:Newton.repo && \
+    zypper -n update && \
+    zypper -n install --force-resolution krb5 && \
+    zypper -n install python-openstackclient openstack-keystone which apache2 apache2-mod_wsgi w3m lynx hostname
 
-RUN apt-get update
-RUN apt-get install -y keystone supervisor
+ADD ./wsgi-keystone.conf /etc/apache2/conf.d/wsgi-keystone.conf
+ADD ./keystone.conf /etc/keystone/keystone.conf
 
-RUN easy_install pip
-RUN pip install --upgrade pbr
-RUN pip install python-openstackclient
+RUN su keystone -s /bin/bash -c "keystone-manage db_sync" && \
+    keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone && \
+    keystone-manage bootstrap --bootstrap-password password \
+        --bootstrap-username admin \
+        --bootstrap-project-name admin \
+        --bootstrap-role-name admin \
+        --bootstrap-service-name keystone
 
-RUN keystone-manage db_sync
-
-COPY bootstrap.sh /
-RUN /bootstrap.sh
-
-# Reduce size of this image
-# RUN apt-get clean
-# RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ADD ./openstack.osrc  /
+ADD ./bootstrap.sh  /usr/local/bin
+RUN /usr/local/bin/bootstrap.sh
 
 EXPOSE 5000 35357
 
-CMD ["/usr/bin/keystone-all"]
+ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
