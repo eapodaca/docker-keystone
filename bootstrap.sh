@@ -15,13 +15,35 @@ source /openstack.osrc
 # Set the admin's default project to be admin
 openstack user set --project admin admin
 
-# Create the user dev as another admin
-openstack user create --project admin --password password --enable dev
-openstack role add --project admin --user dev admin  
-openstack role add --domain default --user dev admin
+PASS=password
+DOM=default
+PROJ=admin
 
-# Create the user 'user' as a non-admin admin
-openstack user create --project admin --password password --enable user
-openstack role add --project admin --user user _member_
+# Create user 'dev' as administrator of Default domain and admin project
+USER=dev
+openstack user create --project $PROJ --password $PASS --enable $USER
+openstack role add --project $PROJ --user $USER admin  
+openstack role add --domain $DOM --user $USER admin
+
+# Create user 'user' as a member of admin project and Default domain
+USER=user
+openstack user create --project $PROJ --password $PASS --enable $USER
+openstack role add --project $PROJ --user $USER _member_
+openstack role add --domain $DOM --user $USER _member_
+
+PROJ=p
+openstack project create $PROJ
+
+# Create user 'dda' as administrator of Default domain and member of project 'p'
+USER=dda
+openstack user create --project $PROJ --password $PASS --enable $USER
+openstack role add --domain $DOM --user $USER admin
+openstack role add --project $PROJ --user $USER _member_
+
+# Create user 'pa' as administrator of project p (but not of any domain)
+USER=pa
+openstack user create --project $PROJ --password $PASS --enable $USER
+openstack role add --domain $DOM --user $USER _member_
+openstack role add --project $PROJ --user $USER admin
 
 /usr/sbin/apache2ctl stop
