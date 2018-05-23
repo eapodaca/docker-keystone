@@ -19,6 +19,9 @@ PASS=password
 DOM=default
 PROJ=admin
 
+# Create _member_ role, which is absent
+openstack role create _member_
+
 # Create user 'dev' as administrator of Default domain and admin project
 USER=dev
 openstack user create --project $PROJ --password $PASS --enable $USER

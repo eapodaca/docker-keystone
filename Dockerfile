@@ -2,7 +2,7 @@ FROM opensuse:42.3
 
 MAINTAINER Gary Smith <gary.smith@suse.com>
 
-RUN zypper addrepo -Gf https://download.opensuse.org/repositories/Cloud:/OpenStack:/Pike/openSUSE_Leap_42.3/Cloud:OpenStack:Pike.repo && \
+RUN zypper addrepo -Gf https://download.opensuse.org/repositories/Cloud:/OpenStack:/Queens/openSUSE_Leap_42.3/Cloud:OpenStack:Queens.repo && \
     zypper -n update && \
     zypper -n install --force-resolution krb5 && \
     zypper -n install python-openstackclient openstack-keystone which apache2 apache2-mod_wsgi w3m lynx hostname

@@ -1,11 +1,11 @@
 # build with:
-docker build -t keystone:pike .
+docker build -t keystone:queens .
 
 # run with:
-docker run -d -p 5000:5000 -p 35357:35357 keystone:pike
+docker run -d -p 5000:5000 -p 35357:35357 keystone:queens
 
 # (or in the foreground with)
-docker run -it -p 5000:5000 -p 35357:35357 keystone:pike
+docker run -it -p 5000:5000 -p 35357:35357 keystone:queens
 
 # to use it with openstack CLI from your host
 1. Install python-openstackclient (using your distro's package manager)
