@@ -1,7 +1,5 @@
 FROM opensuse:42.3
 
-MAINTAINER Gary Smith <gary.smith@suse.com>
-
 RUN zypper addrepo -Gf https://download.opensuse.org/repositories/Cloud:/OpenStack:/Queens/openSUSE_Leap_42.3/Cloud:OpenStack:Queens.repo && \
     zypper -n update && \
     zypper -n install --force-resolution krb5 && \
@@ -22,6 +20,8 @@ ADD ./openstack.osrc  /
 ADD ./bootstrap.sh  /usr/local/bin
 RUN /usr/local/bin/bootstrap.sh
 
+ADD ./start.sh  /usr/local/bin
+
 EXPOSE 5000 35357
 
-ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+ENTRYPOINT ["/usr/local/bin/start.sh"]

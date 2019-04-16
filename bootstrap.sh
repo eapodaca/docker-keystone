@@ -50,3 +50,5 @@ openstack role add --domain $DOM --user $USER _member_
 openstack role add --project $PROJ --user $USER admin
 
 /usr/sbin/apache2ctl stop
+
+rm -f /run/httpd.pid
