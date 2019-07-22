@@ -1,4 +1,4 @@
-FROM opensuse:42.3
+FROM opensuse/leap:42.3
 
 RUN zypper addrepo -Gf https://download.opensuse.org/repositories/Cloud:/OpenStack:/Queens/openSUSE_Leap_42.3/Cloud:OpenStack:Queens.repo && \
     zypper -n update && \
