@@ -1,5 +1,7 @@
 FROM opensuse/leap:42.3
 
+MAINTAINER Gary Smith <gary.smith@suse.com>
+
 RUN zypper addrepo -Gf https://download.opensuse.org/repositories/Cloud:/OpenStack:/Queens/openSUSE_Leap_42.3/Cloud:OpenStack:Queens.repo && \
     zypper -n update && \
     zypper -n install --force-resolution krb5 && \
